@@ -1,0 +1,140 @@
+===============================================
+  Ollama 本地大模型部署教程 - 项目说明
+===============================================
+
+📂 项目结构
+-----------
+ollama-tutorial/
+├── README.md                  # 完整教程文档（主文档）
+├── 快速开始.md                # 5分钟快速部署指南
+├── 客户端配置说明.md          # 各平台客户端配置方法
+├── 配置局域网访问.bat         # 一键配置脚本（需管理员权限）
+├── Python调用示例.py          # Python 代码示例
+├── LICENSE                    # MIT 许可证
+└── .gitignore                 # Git 忽略文件
+
+📖 使用指南
+-----------
+1. 新手入门
+   → 阅读「快速开始.md」
+   → 运行「配置局域网访问.bat」
+   → 测试访问
+
+2. 详细配置
+   → 阅读「README.md」完整教程
+   → 查看「客户端配置说明.md」了解各平台使用
+
+3. 编程调用
+   → 参考「Python调用示例.py」
+   → 查看「客户端配置说明.md」中的其他语言示例
+
+🎯 主要功能
+-----------
+✅ Windows 一键部署 Ollama
+✅ 局域网共享访问配置
+✅ 多设备客户端接入
+✅ Python/JavaScript 调用示例
+✅ VSCode/Cursor 等工具集成
+✅ 常见问题解答
+
+🔧 核心脚本
+-----------
+【配置局域网访问.bat】
+- 自动设置环境变量
+- 添加防火墙规则
+- 显示本机 IP
+- 提供测试方法
+
+运行要求：
+- 需要管理员权限
+- 右键 → "以管理员身份运行"
+
+🌐 支持的客户端
+--------------
+桌面端：
+- Windows / macOS / Linux 命令行
+- VSCode + Continue
+- Cursor
+- PyCharm / IntelliJ
+
+移动端：
+- iOS / Android 浏览器
+- ChatBox App
+- OpenCat App
+
+编程语言：
+- Python (requests / OpenAI SDK / LangChain)
+- JavaScript / TypeScript
+- cURL
+
+📊 推荐配置
+-----------
+硬件要求（服务器端）：
+- GPU: NVIDIA RTX 2060 或更高（6GB+ 显存）
+- RAM: 16GB+
+- 硬盘: 20GB+ 可用空间
+
+推荐模型（RTX 2060 6GB）：
+- qwen3:8b        → 中文对话优秀（5.2 GB）
+- gemma3:4b       → 速度快（3.3 GB）
+- deepseek-r1:7b  → 代码/推理强（4.5 GB）
+
+🚀 快速命令
+-----------
+# 下载模型
+ollama pull qwen3:8b
+
+# 运行模型
+ollama run qwen3:8b
+
+# 查看模型
+ollama list
+
+# 查看运行中的模型
+ollama ps
+
+# 删除模型
+ollama rm qwen3:8b
+
+# 测试服务器
+curl http://localhost:11434
+
+# 测试局域网访问
+curl http://你的IP:11434
+
+📝 上传到 GitHub
+----------------
+1. 在 GitHub 创建新仓库
+2. 在当前目录执行：
+
+   git init
+   git add .
+   git commit -m "Initial commit: Ollama 本地大模型部署教程"
+   git branch -M main
+   git remote add origin <你的仓库地址>
+   git push -u origin main
+
+❓ 常见问题
+-----------
+Q: 手机无法访问？
+A: 1. 确认同一 WiFi
+   2. 使用 IP 而不是 localhost
+   3. 检查防火墙
+   4. 重启 Ollama
+
+Q: 模型下载慢？
+A: 1. 检查网络
+   2. 先下载小模型测试
+   3. 重启 Ollama 重试
+
+Q: 显存不够？
+A: 使用小模型（gemma3:4b 或 qwen3:3b）
+
+📞 获取帮助
+-----------
+- GitHub Issues: <待填写仓库地址>
+- 查看 README.md 常见问题部分
+
+===============================================
+最后更新: 2026-03-11
+===============================================
