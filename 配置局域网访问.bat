@@ -18,18 +18,20 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [1/5] 设置环境变量...
+echo [1/6] 设置环境变量...
 setx OLLAMA_HOST "0.0.0.0:11434" >nul 2>&1
-echo ✓ 环境变量设置成功
+setx OLLAMA_ORIGINS "*" >nul 2>&1
+echo ✓ OLLAMA_HOST = 0.0.0.0:11434
+echo ✓ OLLAMA_ORIGINS = * (允许 Cursor/VSCode 等客户端访问)
 echo.
 
-echo [2/5] 添加防火墙规则...
+echo [2/6] 添加防火墙规则...
 netsh advfirewall firewall delete rule name="Ollama Server" >nul 2>&1
 netsh advfirewall firewall add rule name="Ollama Server" dir=in action=allow protocol=TCP localport=11434 >nul 2>&1
 echo ✓ 防火墙规则添加成功
 echo.
 
-echo [3/5] 获取本机 IP 地址...
+echo [3/6] 获取本机 IP 地址...
 for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /C:"IPv4" ^| findstr /V "169.254"') do (
     set IP=%%a
     goto :found_ip
@@ -39,16 +41,25 @@ set IP=%IP:~1%
 echo ✓ 本机 IP: %IP%
 echo.
 
-echo [4/5] 重启 Ollama 服务...
+echo [4/6] 重启 Ollama 服务...
 taskkill /F /IM ollama.exe >nul 2>&1
 timeout /t 2 /nobreak >nul
 start "" "C:\Users\%USERNAME%\AppData\Local\Programs\Ollama\ollama app.exe"
 echo ✓ Ollama 已重启
 echo.
 
-echo [5/5] 等待服务启动...
+echo [5/6] 等待服务启动...
 timeout /t 3 /nobreak >nul
 echo ✓ 服务已启动
+echo.
+
+echo [6/6] 验证配置...
+for /f "tokens=*" %%a in ('powershell -Command "[System.Environment]::GetEnvironmentVariable('OLLAMA_ORIGINS', 'User')"') do set CORS_CHECK=%%a
+if "%CORS_CHECK%"=="*" (
+    echo ✓ CORS 配置正确 - Cursor/VSCode 可以连接
+) else (
+    echo ⚠ CORS 未配置 - 可能需要手动重启电脑
+)
 echo.
 
 echo ========================================
@@ -101,9 +112,20 @@ echo    )
 echo    print(response.json()["response"])
 echo.
 
-echo 5. 客户端配置（ChatBox/Continue等）：
-echo    API地址: http://%IP%:11434
-echo    模型: qwen3:8b （或其他已安装的模型）
+echo 5. Cursor/VSCode 配置：
+echo    Settings → Models → Override OpenAI Base URL
+echo    Base URL: http://%IP%:11434/v1 （注意要有 /v1）
+echo    API Key: 随便填（如 sk-111111）
+ollama list 2>nul | findstr /V "NAME" | findstr /V "^$" >temp_models2.txt
+for /f "tokens=1" %%m in (temp_models2.txt) do (
+    echo    模型选择: %%m （在聊天界面顶部选择）
+    goto :show_cursor_model
+)
+:show_cursor_model
+del temp_models2.txt >nul 2>&1
+echo.
+echo 6. 其他客户端（ChatBox/OpenCat等）：
+echo    API地址: http://%IP%:11434/v1
 echo.
 
 echo 💡 提示：
